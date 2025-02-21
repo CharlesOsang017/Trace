@@ -1,5 +1,5 @@
 import User from "../models/user.model.js";
-import bcrypt from 'bcrypt'
+import bcrypt from "bcrypt";
 
 export const registerUser = async (req, res) => {
   try {
@@ -21,12 +21,12 @@ export const registerUser = async (req, res) => {
     }
     // hashing the password
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt)
+    const hashedPassword = await bcrypt.hash(password, salt);
 
     const newUser = new User({
       name,
       email,
-      password:hashedPassword,
+      password: hashedPassword,
       role,
     });
     await newUser.save();
@@ -34,5 +34,25 @@ export const registerUser = async (req, res) => {
   } catch (error) {
     console.log("error in registerUser controller", error.message);
     return res.status(500).json({ error: error.message });
+  }
+};
+
+export const loginUser = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const user = await User.findOne({ email });
+
+    const comparePassword = await bcrypt.compare(password, user?.password);
+    if (!user || !comparePassword) {
+      return res
+        .status(404)
+        .json({ message: "Password or email is incorrect" });
+    }
+    // Remove password from response
+    const { password: _, ...userWithoutPassword } = user.toObject();
+    return res.status(200).json(userWithoutPassword);
+  } catch (error) {
+    console.log("error in login controller", error.message);
+    return res.status(500).json({ message: "internal server error" });
   }
 };
