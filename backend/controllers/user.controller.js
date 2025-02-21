@@ -1,7 +1,8 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcrypt";
-import { generateToken } from "../utils/token.js";
+import { generateTokenAndSetCookie } from "../utils/token.js";
 
+// Register User
 export const registerUser = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
@@ -34,38 +35,44 @@ export const registerUser = async (req, res) => {
     const { password: _, ...user } = newUser.toObject();
 
     // generate JWT token
-    const token = await generateToken(newUser);
+    generateTokenAndSetCookie(newUser._id, res);
 
-    return res
-      .status(201)
-      .json({ message: "User created successfully", user, token });
+    return res.status(201).json(user);
   } catch (error) {
     console.log("error in registerUser controller", error.message);
     return res.status(500).json({ error: error.message });
   }
 };
 
+// Login User
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
   try {
-    const existingUser = await User.findOne({ email });
-
-    const comparePassword = await bcrypt.compare(
+    const user = await User.findOne({ email });
+    const isPasswordCorrect = await bcrypt.compare(
       password,
-      existingUser?.password
+      user?.password || ""
     );
-    if (!existingUser || !comparePassword) {
+    if (!user || !isPasswordCorrect) {
       return res
         .status(404)
-        .json({ message: "Password or email is incorrect" });
+        .json({ message: "email or password is not correct" });
     }
-    // Remove password from response
-    const { password: _, ...user } = existingUser.toObject();
-    const token = await generateToken(existingUser);
+    generateTokenAndSetCookie(user?._id, res);
 
-    return res.status(200).json({ user, token });
+    const { password: _, ...userWithoutPassword } = user.toObject();
+    return res.status(200).json(userWithoutPassword);
   } catch (error) {
-    console.log("error in login controller", error.message);
-    return res.status(500).json({ message: "internal server error" });
+    console.log("error loging in user", error.message);
+  }
+};
+
+// Logout user
+export const logOutUser = async (req, res) => {
+  try {
+    res.cookie("jwt", "", { maxAge: 0 });
+    return res.status(200).json({ message: "logged out successfully!" });
+  } catch (error) {
+    console.log("error logging out ", error.message);
   }
 };
