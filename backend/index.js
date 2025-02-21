@@ -3,6 +3,7 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import { connectToDb } from "./config/db.js";
+import authRoutes from './routes/user.route.js'
 
 dotenv.config();
 
@@ -13,6 +14,9 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
 
+
+// routes
+app.use('/api/v1/users', authRoutes)
 const PORT = process.env.PORT || 5000;
 
 // Start the server
