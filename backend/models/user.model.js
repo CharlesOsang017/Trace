@@ -7,16 +7,22 @@ const userSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    role: {
+    profileImg: {
       type: String,
-      enum: ["user", "admin"],
-      default: "user",
+      required: false,
+      default:
+        "https://www.clipartkey.com/mpngs/m/152-1520367_user-profile-default-image-png-clipart-png-download.png",
     },
     email: {
       type: String,
       required: true,
       unique: true,
       trim: true,
+    },
+    role: {
+      type: String,
+      enum: ["technician", "admin"],
+      default: "technician",
     },
     password: {
       type: String,
