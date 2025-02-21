@@ -1,5 +1,6 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcrypt";
+import { generateToken } from "../utils/token.js";
 
 export const registerUser = async (req, res) => {
   try {
@@ -30,7 +31,14 @@ export const registerUser = async (req, res) => {
       role,
     });
     await newUser.save();
-    return res.status(201).json({ message: "user created successfully" });
+    const { password: _, ...user } = newUser.toObject();
+
+    // generate JWT token
+    const token = await generateToken(newUser);
+
+    return res
+      .status(201)
+      .json({ message: "User created successfully", user, token });
   } catch (error) {
     console.log("error in registerUser controller", error.message);
     return res.status(500).json({ error: error.message });
@@ -40,17 +48,22 @@ export const registerUser = async (req, res) => {
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
   try {
-    const user = await User.findOne({ email });
+    const existingUser = await User.findOne({ email });
 
-    const comparePassword = await bcrypt.compare(password, user?.password);
-    if (!user || !comparePassword) {
+    const comparePassword = await bcrypt.compare(
+      password,
+      existingUser?.password
+    );
+    if (!existingUser || !comparePassword) {
       return res
         .status(404)
         .json({ message: "Password or email is incorrect" });
     }
     // Remove password from response
-    const { password: _, ...userWithoutPassword } = user.toObject();
-    return res.status(200).json(userWithoutPassword);
+    const { password: _, ...user } = existingUser.toObject();
+    const token = await generateToken(existingUser);
+
+    return res.status(200).json({ user, token });
   } catch (error) {
     console.log("error in login controller", error.message);
     return res.status(500).json({ message: "internal server error" });
