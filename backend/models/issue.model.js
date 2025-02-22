@@ -1,7 +1,12 @@
 import mongoose from "mongoose";
 
 const issueSchema = new mongoose.Schema({
-  name: {
+  title: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  description: {
     type: String,
     required: true,
     trim: true,
@@ -10,6 +15,16 @@ const issueSchema = new mongoose.Schema({
     type: String,
     required: true,
     enum: ["open", "closed", "in progress"],
+    default: "open",
+  },
+  assignedTo: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User", // Reference to the user (technician)
+  },
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User", // reference to the user (admin)
+    required: true,
   },
   statusTimestamps: {
     open: { type: Date },
