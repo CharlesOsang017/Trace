@@ -18,7 +18,7 @@ app.use(cors());
 
 // routes
 app.use('/api/v1/users', authRoutes)
-app.use('/api/v1/admin/issues', issueRoutes)
+app.use('/api/v1/issues', issueRoutes)
 const PORT = process.env.PORT || 5000;
 
 // Start the server

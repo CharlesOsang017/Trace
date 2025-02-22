@@ -20,6 +20,7 @@ const issueSchema = new mongoose.Schema({
   assignedTo: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User", // Reference to the user (technician)
+    required: false,
   },
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
