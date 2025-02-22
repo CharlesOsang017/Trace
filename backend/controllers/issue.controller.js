@@ -1,4 +1,5 @@
 import Issue from "../models/issue.model.js";
+import User from "../models/user.model.js";
 
 export const createIssue = async (req, res) => {
   try {
@@ -26,3 +27,41 @@ export const createIssue = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+export const assignIssue = async (req, res) => {
+  try {
+    const { issueId, technicianId } = req.body;
+
+    // Find the issue
+    const issue = await Issue.findById(issueId);
+    if (!issue) return res.status(404).json({ message: "Issue not found" });
+
+    // Ensure the issue is not already assigned
+    if (issue.assignedTo) {
+      return res.status(400).json({ message: "This issue is already assigned to another technician" });
+    }
+
+    // Find the technician and ensure they are not an admin
+    const technician = await User.findById(technicianId);
+    if (!technician || technician.role !== "technician") {
+      return res.status(400).json({ message: "Invalid technician ID or technician not found" });
+    }
+
+    // Check if the technician is already assigned to another issue
+    const existingAssignment = await Issue.findOne({ assignedTo: technicianId });
+    if (existingAssignment) {
+      return res.status(400).json({ message: "Technician is already assigned to another issue" });
+    }
+
+    // Assign the issue to the technician
+    issue.assignedTo = technicianId;
+    issue.statusTimestamps.inProgress = new Date();
+    await issue.save();
+
+    return res.status(200).json({ message: "Issue assigned successfully", issue });
+  } catch (error) {
+    console.error("Error in assignIssue:", error.message);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+

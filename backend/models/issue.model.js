@@ -34,13 +34,7 @@ const issueSchema = new mongoose.Schema({
   },
 });
 
-// Middleware to track status change timestamps
-issueSchema.pre("save", function (next) {
-  if (this.isModified("status")) {
-    this.statusTimestamps[this.status] = new Date(); // Update timestamp when status changes
-  }
-  next();
-});
+
 
 const Issue = mongoose.model("Issue", issueSchema);
 export default Issue;
