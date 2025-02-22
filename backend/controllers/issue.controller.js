@@ -119,3 +119,34 @@ export const getAllIssues = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+// Get issues by status (Admin & Technician)
+export const getIssuesByStatus = async (req, res) => {
+  try {
+    const { status } = req.query; // Get status from query params
+
+    // Ensure a valid status is provided
+    const validStatuses = ["open", "closed", "in progress"];
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({ message: "Invalid status" });
+    }
+
+    let issues;
+
+    if (req.user.role === "admin") {
+      // Admin can view all issues with the given status
+      issues = await Issue.find({ status }).populate(
+        "assignedTo",
+        "name email"
+      );
+    } else {
+      // Technicians can only see issues assigned to them with the given status
+      issues = await Issue.find({ status, assignedTo: req.user.id });
+    }
+
+    return res.status(200).json({ count: issues.length, issues });
+  } catch (error) {
+    console.error("Error in getIssuesByStatus:", error.message);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};

@@ -17,5 +17,6 @@ router.post("/assign", protectRoute, admin, assignIssue);
 router.delete("/delete/:issueId", protectRoute, admin, deleteIssue);
 router.put("/update/:issueId", protectRoute, admin, updateIssue);
 router.get("/all", protectRoute, getAllIssues)
+router.get("/status", protectRoute, admin, getAllIssues)
 
 export default router;
