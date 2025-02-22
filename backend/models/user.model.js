@@ -7,12 +7,12 @@ const userSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    profileImg: {
-      type: String,
-      required: false,
-      default:
-        "https://www.clipartkey.com/mpngs/m/152-1520367_user-profile-default-image-png-clipart-png-download.png",
-    },
+    // profileImg: {
+    //   type: String,
+    //   required: false,
+    //   default:
+    //     "https://www.clipartkey.com/mpngs/m/152-1520367_user-profile-default-image-png-clipart-png-download.png",
+    // },
     email: {
       type: String,
       required: true,
