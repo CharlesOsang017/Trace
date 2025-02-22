@@ -108,3 +108,14 @@ export const updateIssue = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+export const getAllIssues = async (req, res) => {
+  try {
+    const issues = await Issue.find();
+    if (!issues) return res.status(200).json({});
+    return res.status(200).json(issues);
+  } catch (error) {
+    console.log("error in getAll issues controller", error.message);
+    return res.status(500).json({ message: error.message });
+  }
+};
