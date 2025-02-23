@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import LatestIssues from "@/components/latestIssues";
+// import { Bar } from "react-chartjs-2";
+import { Bar, BarChart, Tooltip, ResponsiveContainer, YAxis, XAxis } from "recharts";
 
 export default function Home() {
   // Sample analytics data
@@ -14,7 +16,12 @@ export default function Home() {
 
   // Sample latest issues data
   const issues = [
-    { id: 1, title: "Fix login bug", status: "Open", assignedTo: "https://i.pravatar.cc/160" },
+    {
+      id: 1,
+      title: "Fix login bug",
+      status: "Open",
+      assignedTo: "https://i.pravatar.cc/160",
+    },
     {
       id: 2,
       title: "Update UI for dashboard",
@@ -26,7 +33,8 @@ export default function Home() {
       title: "Improve API performance",
       status: "Closed",
       // assignedTo: "Charlie",
-    },   {
+    },
+    {
       id: 4,
       title: "Update UI for dashboard",
       status: "In Progress",
@@ -58,10 +66,18 @@ export default function Home() {
 
         {/* Analytics Section */}
         <Card className="p-4">
-          <CardHeader>
-            <CardTitle className="text-xl font-bold">Issue Analytics</CardTitle>
-          </CardHeader>
-          <CardContent className="h-64"></CardContent>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={analyticsData}>
+                <YAxis dataKey="count" />
+                <XAxis dataKey="status" />
+
+                <Bar dataKey="count" />
+
+                <Tooltip />
+              </BarChart>
+            </ResponsiveContainer>
+          </CardContent>
         </Card>
       </div>
 
