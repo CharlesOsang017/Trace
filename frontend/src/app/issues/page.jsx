@@ -1,4 +1,5 @@
-'use client'
+"use client";
+import { Button } from "@/components/ui/button";
 import React, { useState } from "react";
 
 const Issues = () => {
@@ -28,23 +29,29 @@ const Issues = () => {
       : issues.filter((issue) => issue.status === filter);
 
   return (
-    <div className="p-6">
-      {/* Filter Dropdown */}
-      <div className="mb-4">
-        <label htmlFor="statusFilter" className="text-lg font-semibold mr-2">
-          Filter by Status:
-        </label>
-        <select
-          id="statusFilter"
-          className="border p-2 rounded-md"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        >
-          <option value="All">All</option>
-          <option value="Open">Open</option>
-          <option value="In Progress">In Progress</option>
-          <option value="Closed">Closed</option>
-        </select>
+    <div className="p-6 py-20">
+      {/* Filter Dropdown && new Issue button */}
+      <div className="flex items-center justify-between">
+        <div className="mb-4">
+          <label htmlFor="statusFilter" className="text-lg font-semibold mr-2">
+            Filter by Status:
+          </label>
+          <select
+            id="statusFilter"
+            className="border p-2 rounded-md"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+          >
+            <option value="All">All</option>
+            <option value="Open">Open</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Closed">Closed</option>
+          </select>
+        </div>
+
+        <div className="mb-4 text-lg">
+          <Button className="bg-purple-600 hover:bg-purple-800" >New Issue</Button>
+        </div>
       </div>
 
       {/* Issues Table */}
