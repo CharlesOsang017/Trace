@@ -3,7 +3,7 @@ import { Bug } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
 
-const SignUp = () => {
+const Login = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,16 +22,7 @@ const SignUp = () => {
           <div className="flex items-center justify-center mb-4">
             <Bug size={50} /> <p className="text-3xl font-bold">Trace</p>
           </div>
-          <h1 className="text-2xl font-bold mb-4 text-center">Sign Up</h1>
-
-          <label className="block text-lg font-medium mb-2">Name</label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full p-2 border rounded-md mb-4"
-          />
-
+          <h1 className="text-2xl font-bold mb-4 text-center">Login</h1>
           <label className="block text-lg font-medium mb-2">Email</label>
           <input
             type="email"
@@ -49,12 +40,12 @@ const SignUp = () => {
           />
 
           <button className="w-full p-2 bg-blue-500 text-white rounded-md">
-            Sign Up
+            Login
           </button>
           <small className="mt-4 block text-lg">
-            Already have an account?{" "}
-            <Link href="/login" className="text-blue-500 hover:underline">
-              Login
+            Don't have an account?{" "}
+            <Link href="/signup" className="text-blue-500 hover:underline">
+              Sign Up
             </Link>{" "}
           </small>
         </div>
@@ -63,4 +54,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default Login;
