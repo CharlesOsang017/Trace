@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import React, { useState } from "react";
 
 const Issues = () => {
@@ -49,9 +50,11 @@ const Issues = () => {
           </select>
         </div>
 
-        <div className="mb-4 text-lg">
-          <Button className="bg-purple-600 hover:bg-purple-800" >New Issue</Button>
-        </div>
+        <Link href={"/issues/new"} className="mb-4 text-lg">
+          <Button className="bg-purple-600 hover:bg-purple-800">
+            New Issue
+          </Button>
+        </Link>
       </div>
 
       {/* Issues Table */}
