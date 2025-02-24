@@ -31,7 +31,9 @@ const Topbar = () => {
               key={link.href}
               href={link.href}
               className={`hover:text-blue-500 transition ${
-                pathname === link.href ? "text-blue-500 border-b border-blue-500 transition duration-100 " : ""
+                pathname === link.href
+                  ? "text-blue-500 border-b border-blue-500 transition duration-100 "
+                  : ""
               }`}
             >
               {link.name}
@@ -54,8 +56,12 @@ const Topbar = () => {
           </div>
         ) : (
           <div className="hidden md:flex gap-3">
-            <Button variant="outline">Login</Button>
-            <Button>Register</Button>
+            <Button variant="outline">
+              <Link href={"/login"}> Login</Link>
+            </Button>
+            <Button>
+              <Link href={"/signup"}>Register</Link>
+            </Button>
           </div>
         )}
 
@@ -98,11 +104,12 @@ const Topbar = () => {
                     variant="outline"
                     className="w-full"
                     onClick={() => setIsOpen(false)}
+                    asChild
                   >
-                    Login
+                    <Link href={"/login"}> Login</Link>
                   </Button>
                   <Button className="w-full" onClick={() => setIsOpen(false)}>
-                    Register
+                    <Link href={"/signup"}>Register</Link>
                   </Button>
                 </div>
               )}
