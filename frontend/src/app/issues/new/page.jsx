@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import ReactMarkdown from "react-markdown";
+import SimpleMDE from "react-simplemde-editor";
+import "easymde/dist/easymde.min.css";
 import TextareaAutosize from "react-textarea-autosize";
 
 const NewIssue = () => {
@@ -8,7 +9,7 @@ const NewIssue = () => {
   const [description, setDescription] = useState("");
 
   return (
-    <div className="px-20 py-10 max-w-2xl">
+    <div className="md:px-20 px-2.5 py-10 md:max-w-6xl w-full">
       <h1 className="text-2xl font-bold mb-4">New Issue</h1>
 
       <label className="block text-lg font-medium mb-2">Title</label>
@@ -21,7 +22,7 @@ const NewIssue = () => {
       />
 
       <label className="block text-lg font-medium mb-2">Description</label>
-      <TextareaAutosize
+      <SimpleMDE
         minRows={3}
         value={description}
         onChange={(e) => setDescription(e.target.value)}
