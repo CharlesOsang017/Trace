@@ -1,12 +1,19 @@
 "use client";
-
 import { useState } from "react";
 import { Bug, LogOut, Menu } from "lucide-react";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { usePathname } from "next/navigation";
 
 const Topbar = () => {
+  const pathname = usePathname(); // Use the hook inside the component
+
+  const links = [
+    { name: "Dashboard", href: "/" },
+    { name: "Issues", href: "/issues" },
+  ];
+
   const [isOpen, setIsOpen] = useState(false); // State to control Sheet
   const user = false; // Change this to false to test logged-out state
 
@@ -19,12 +26,17 @@ const Topbar = () => {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex gap-6 text-lg">
-          <Link href="/" className="hover:text-blue-500 transition">
-            Home
-          </Link>
-          <Link href="/issues" className="hover:text-blue-500 transition">
-            Issues
-          </Link>
+          {links.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={`hover:text-blue-500 transition ${
+                pathname === link.href ? "text-blue-500 border-b border-blue-500 transition duration-100 " : ""
+              }`}
+            >
+              {link.name}
+            </Link>
+          ))}
         </nav>
       </div>
 
@@ -57,20 +69,16 @@ const Topbar = () => {
           </SheetTrigger>
           <SheetContent side="right" className="w-64 p-6">
             <nav className="flex flex-col space-y-4 text-lg">
-              <Link
-                href="/"
-                onClick={() => setIsOpen(false)}
-                className="hover:text-blue-500 transition"
-              >
-                Home
-              </Link>
-              <Link
-                href="/issues"
-                onClick={() => setIsOpen(false)}
-                className="hover:text-blue-500 transition"
-              >
-                Issues
-              </Link>
+              {links.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setIsOpen(false)}
+                  className="hover:text-blue-500 transition"
+                >
+                  {link.name}
+                </Link>
+              ))}
 
               {user ? (
                 <div className="gap-3 mt-6">
