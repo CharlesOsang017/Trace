@@ -5,11 +5,10 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { BASE_API_URL } from "../../../../server";
 import { useRouter } from "next/navigation";
 import { handleAuthRequest } from "@/components/utils/apiRequest";
-import { set } from "react-hook-form";
 import LoadingBtn from "@/components/helper/LoadingBtn";
+import { BASE_API_URL } from "@/server";
 
 const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false);

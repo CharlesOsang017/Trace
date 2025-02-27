@@ -8,9 +8,9 @@ import { usePathname, useRouter } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { handleAuthRequest } from "./utils/apiRequest";
-import { BASE_API_URL } from "../../server";
 import { toast } from "sonner";
-// import axiosInstance from "@/AxiosInstance";
+import { BASE_API_URL } from "@/server";
+
 
 const Topbar = () => {
   const pathname = usePathname();

@@ -3,10 +3,11 @@
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import  { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { handleAuthRequest } from "@/components/utils/apiRequest";
-import { BASE_API_URL } from "../../../server";
+import { BASE_API_URL } from "@/server";
+
 
 const Issues = () => {
   const [filter, setFilter] = useState("All");
