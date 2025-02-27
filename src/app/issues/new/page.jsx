@@ -1,8 +1,12 @@
 "use client";
-import  { useState } from "react";
-import SimpleMDE from "react-simplemde-editor";
+import { useState } from "react";
+import dynamic from "next/dynamic";
 import "easymde/dist/easymde.min.css";
 
+// Dynamically import SimpleMDE to prevent SSR issues
+const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
+  ssr: false, // Disable server-side rendering
+});
 
 const NewIssue = () => {
   const [title, setTitle] = useState("");
@@ -23,11 +27,9 @@ const NewIssue = () => {
 
       <label className="block text-lg font-medium mb-2">Description</label>
       <SimpleMDE
-        minRows={3}
         value={description}
-        onChange={(e) => setDescription(e.target.value)}
+        onChange={setDescription}
         className="w-full p-2 border rounded-md mb-4"
-        placeholder="Enter issue description..."
       />
     </div>
   );
