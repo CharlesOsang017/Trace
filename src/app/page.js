@@ -74,10 +74,10 @@ export default function Home() {
         </div>
 
         {/* Analytics Section */}
-        <Card className="p-4">
+        <Card className="py-4">
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={analyticsData}>
+              <BarChart data={analyticsData} className="w-full">
                 <YAxis dataKey="count" />
                 <XAxis dataKey="status" />
 

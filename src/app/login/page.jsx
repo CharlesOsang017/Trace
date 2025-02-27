@@ -4,11 +4,9 @@ import axios from "axios";
 import { Bug } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
-
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { handleAuthRequest } from "@/components/utils/apiRequest";
-import { set } from "react-hook-form";
 import LoadingBtn from "@/components/helper/LoadingBtn";
 import { BASE_API_URL } from "@/server";
 
@@ -57,7 +55,7 @@ const Login = () => {
           className="w-full h-full object-cover bg-white"
         />
       </div>
-      <div className="md:w-1/2 w-full flex items-center justify-center p-8 h-screen ">
+      <div className="md:w-1/2 w-full flex mt-5 p-8 h-screen ">
         <div className="max-w-md w-full">
           <div className="flex items-center justify-center mb-4">
             <Bug size={50} /> <p className="text-3xl font-bold">Trace</p>

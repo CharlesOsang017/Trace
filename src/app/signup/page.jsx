@@ -41,7 +41,7 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex h-screen items-center justify-center">
+    <div className="flex md:h-screen items-center">
       <div className="hidden md:flex w-1/2 h-full">
         <img
           src="https://png.pngtree.com/png-vector/20241204/ourmid/pngtree-find-bugs-on-programming-computer-icon-png-image_14568602.png"
@@ -49,7 +49,7 @@ const SignUp = () => {
           className="w-full h-full object-cover bg-white"
         />
       </div>
-      <div className="md:w-1/2 w-full flex items-center justify-center p-8 h-screen">
+      <div className="md:w-1/2 w-full flex mt-4 p-8 h-screen">
         <div className="max-w-md w-full">
           <div className="flex items-center justify-center mb-4">
             <Bug size={50} /> <p className="text-3xl font-bold">Trace</p>
