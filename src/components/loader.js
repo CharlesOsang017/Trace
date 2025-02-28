@@ -4,7 +4,7 @@ import React from "react";
 const Loading = () => {
   return (
     <div className="flex justify-center items-center mt-24">
-      <Loader className="w-12 h-12 animate-spin" />
+      <Loader className="w-10 h-10 animate-spin" />
     </div>
   );
 };
