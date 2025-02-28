@@ -124,7 +124,13 @@ const Topbar = () => {
 
               {user ? (
                 <div className="gap-3 mt-6">
-                  <LogOut onClick={() => mutate()} className="cursor-pointer" />
+                  <LogOut
+                    onClick={() => {
+                      mutate();
+                      setIsOpen(false);
+                    }}
+                    className="cursor-pointer"
+                  />
                   <div className="flex gap-3 items-center py-4">
                     <img
                       src={user.profileImg || "https://i.pravatar.cc/150"}
@@ -136,10 +142,14 @@ const Topbar = () => {
                 </div>
               ) : (
                 <div className="flex flex-col gap-3 mt-4">
-                  <Button variant="outline" className="w-full">
+                  <Button
+                    onClick={() => setIsOpen(false)}
+                    variant="outline"
+                    className="w-full"
+                  >
                     <Link href="/login">Login</Link>
                   </Button>
-                  <Button className="w-full">
+                  <Button onClick={() => setIsOpen(false)} className="w-full">
                     <Link href="/signup">Register</Link>
                   </Button>
                 </div>
