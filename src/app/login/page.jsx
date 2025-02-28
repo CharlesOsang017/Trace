@@ -33,7 +33,7 @@ const Login = () => {
     onSuccess: () => {
       toast.success("User logged in successfully");
       queryClient.invalidateQueries({queryKey: ["user"]}); // Refresh user data
-      router.push("/");
+      window.location.href = '/'
     },
     onError: (error) => {
       toast.error(error?.response?.data?.message || "Login failed.");
