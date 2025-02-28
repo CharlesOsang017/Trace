@@ -7,6 +7,8 @@ import { useState } from "react";
 import axios from "axios";
 import { handleAuthRequest } from "@/components/utils/apiRequest";
 import { BASE_API_URL } from "@/server";
+import Loading from "@/components/loader";
+
 
 
 const Issues = () => {
@@ -65,7 +67,7 @@ const Issues = () => {
       </div>
 
       {/* Loading & Error States */}
-      {isPending && <p className="text-center py-4">Loading issues...</p>}
+      {isPending && <Loading />}
       {isError && (
         <p className="text-center py-4 text-red-600">
           Failed to load issues. {error?.message || "Try again later."}
