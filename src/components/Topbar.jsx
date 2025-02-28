@@ -59,9 +59,11 @@ const Topbar = () => {
   return (
     <header className="h-16 border-b border-gray-300 px-4 md:px-6 flex items-center justify-between">
       {/* Left: Logo & Navigation */}
-      <div className="flex items-center gap-4 md:gap-6">
-        <Bug className="w-6 h-6" />
-        <h1 className="text-xl md:text-2xl font-bold">Trace</h1>
+      <div className="flex items-center gap-4 md:gap-4">
+       <div className="flex items-center gap-1">
+       <Bug className="w-6 h-6" />
+       <h1 className="text-xl md:text-2xl font-bold">trace</h1>
+       </div>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex gap-6 text-lg">
