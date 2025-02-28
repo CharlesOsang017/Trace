@@ -11,7 +11,6 @@ import { handleAuthRequest } from "./utils/apiRequest";
 import { toast } from "sonner";
 import { BASE_API_URL } from "@/server";
 
-
 const Topbar = () => {
   const pathname = usePathname();
   const queryClient = useQueryClient();
@@ -40,23 +39,20 @@ const Topbar = () => {
   // Handle Logout
   const { mutate, isPending } = useMutation({
     mutationFn: async () => {
-      const logoutReq = async () =>
-        await axios.post(
-          `${BASE_API_URL}/users/logout`,
-          {},
-          {
-            withCredentials: true,
-          }
-        );
-      const result = await handleAuthRequest(logoutReq, setIsLoading);
-      if (result) {
-        console.log("result", result);
-        toast.success("User logged out successfully");
-        router.push("/login");
-      }
+      const response = await axios.post(
+        `${BASE_API_URL}/users/logout`,
+        {},
+        { withCredentials: true }
+      );
+      return response.data; // Ensure the result is returned
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(["user"]);
+      toast.success("User logged out successfully");
+      queryClient.setQueryData(["user"], null); // Refresh user query
+      router.push("/login"); // Redirect after logout
+    },
+    onError: (error) => {
+      toast.error(error.response?.data?.message || "Logout failed");
     },
   });
 

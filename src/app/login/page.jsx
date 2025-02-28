@@ -32,7 +32,7 @@ const Login = () => {
     },
     onSuccess: () => {
       toast.success("User logged in successfully");
-      queryClient.invalidateQueries(["user"]); // Refresh user data
+      queryClient.invalidateQueries({queryKey: ["user"]}); // Refresh user data
       router.push("/");
     },
     onError: (error) => {

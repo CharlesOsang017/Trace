@@ -22,16 +22,19 @@ const SignUp = () => {
 
   const { mutate, isPending, error, isError } = useMutation({
     mutationFn: async (formData) => {
-      const signupReq = async () =>
-        await axios.post(`${BASE_API_URL}/users/register`, formData, {
-          withCredentials: true,
-        });
-      const result = await handleAuthRequest(signupReq, setIsLoading);
-      if (result) {
-        console.log("result", result);
-        toast.success("User registered successfully");
-        router.push("/login");
-      }
+      const response = await axios.post(
+        `${BASE_API_URL}/users/register`,
+        formData,
+        { withCredentials: true }
+      );
+      return response.data; // Ensure the response is returned
+    },
+    onSuccess: () => {
+      toast.success("User registered successfully");
+      router.push("/login"); // Redirect to login page
+    },
+    onError: (error) => {
+      toast.error(error.response?.data?.message || "Registration failed");
     },
   });
 
