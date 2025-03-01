@@ -93,7 +93,11 @@ const Issues = () => {
               {paginatedIssues.length > 0 ? (
                 paginatedIssues.map((issue) => (
                   <tr key={issue.id} className="hover:bg-gray-100">
-                    <td className="border p-3">{issue.title}</td>
+                    <td className="border p-3">
+                      <Link className="hover:underline" href={`/issues/${issue._id}`}>
+                        {issue.title}
+                      </Link>
+                    </td>
                     <td
                       className={`border p-3 font-semibold ${
                         issue.status === "open"
