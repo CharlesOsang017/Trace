@@ -9,14 +9,14 @@ import { handleAuthRequest } from "@/components/utils/apiRequest";
 import { BASE_API_URL } from "@/server";
 import Loading from "@/components/loader";
 
-
-
 const Issues = () => {
   const [filter, setFilter] = useState("All");
   const [isLoading, setIsLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const issuesPerPage = 5;
 
   const {
-    data: issuesList = [], // Default to empty array to prevent errors
+    data: issuesList = [],
     isPending,
     isError,
     error,
@@ -27,15 +27,19 @@ const Issues = () => {
         const response = await axios.get(`${BASE_API_URL}/issues/all`, {
           withCredentials: true,
         });
-        return response.data; // Ensure we return the data
+        return response.data;
       }, setIsLoading);
     },
   });
 
-  console.log("issuesList", issuesList);
-
   const filteredIssues = (issuesList || []).filter(
     (issue) => filter === "All" || issue.status === filter
+  );
+
+  const totalPages = Math.ceil(filteredIssues.length / issuesPerPage);
+  const paginatedIssues = filteredIssues.slice(
+    (currentPage - 1) * issuesPerPage,
+    currentPage * issuesPerPage
   );
 
   return (
@@ -53,9 +57,9 @@ const Issues = () => {
             onChange={(e) => setFilter(e.target.value)}
           >
             <option value="All">All</option>
-            <option value="Open">Open</option>
-            <option value="In Progress">In Progress</option>
-            <option value="Closed">Closed</option>
+            <option value="open">Open</option>
+            <option value="in progress">In Progress</option>
+            <option value="closed">Closed</option>
           </select>
         </div>
 
@@ -86,15 +90,15 @@ const Issues = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredIssues.length > 0 ? (
-                filteredIssues.map((issue) => (
+              {paginatedIssues.length > 0 ? (
+                paginatedIssues.map((issue) => (
                   <tr key={issue.id} className="hover:bg-gray-100">
                     <td className="border p-3">{issue.title}</td>
                     <td
                       className={`border p-3 font-semibold ${
-                        issue.status === "Open"
+                        issue.status === "open"
                           ? "text-red-600"
-                          : issue.status === "In Progress"
+                          : issue.status === "in progress"
                           ? "text-yellow-600"
                           : "text-green-600"
                       }`}
@@ -115,6 +119,29 @@ const Issues = () => {
               )}
             </tbody>
           </table>
+
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="flex justify-center mt-4 space-x-2">
+              <Button
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+              >
+                Previous
+              </Button>
+              <span className="px-4 py-2 border rounded-md">
+                {currentPage} / {totalPages}
+              </span>
+              <Button
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                }
+                disabled={currentPage === totalPages}
+              >
+                Next
+              </Button>
+            </div>
+          )}
         </div>
       )}
     </div>
