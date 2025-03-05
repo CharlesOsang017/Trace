@@ -8,6 +8,8 @@ import axios from "axios";
 import { handleAuthRequest } from "@/components/utils/apiRequest";
 import { BASE_API_URL } from "@/server";
 import Loading from "@/components/loader";
+import { MoveRight } from "lucide-react";
+import { MoveLeft } from "lucide-react";
 
 const Issues = () => {
   const [filter, setFilter] = useState("All");
@@ -21,7 +23,7 @@ const Issues = () => {
     isError,
     error,
   } = useQuery({
-    queryKey: ["issues"],
+    queryKey: ["all-issues"],
     queryFn: async () => {
       return handleAuthRequest(async () => {
         const response = await axios.get(`${BASE_API_URL}/issues/all`, {
@@ -31,6 +33,8 @@ const Issues = () => {
       }, setIsLoading);
     },
   });
+
+  console.log('issues',issuesList);
 
   const filteredIssues = (issuesList || []).filter(
     (issue) => filter === "All" || issue.status === filter
@@ -92,9 +96,12 @@ const Issues = () => {
             <tbody>
               {paginatedIssues.length > 0 ? (
                 paginatedIssues.map((issue) => (
-                  <tr key={issue.id} className="hover:bg-gray-100">
+                  <tr key={issue._id} className="hover:bg-gray-100">
                     <td className="border p-3">
-                      <Link className="hover:underline" href={`/issues/${issue._id}`}>
+                      <Link
+                        className="hover:underline"
+                        href={`/issues/${issue._id}`}
+                      >
                         {issue.title}
                       </Link>
                     </td>
@@ -126,23 +133,37 @@ const Issues = () => {
 
           {/* Pagination Controls */}
           {totalPages > 1 && (
-            <div className="flex justify-center mt-4 space-x-2">
+            <div className="flex justify-end mt-4 space-x-2">
               <Button
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
               >
-                Previous
+                <MoveLeft />
               </Button>
-              <span className="px-4 py-2 border rounded-md">
-                {currentPage} / {totalPages}
-              </span>
+
+              {/* Page Numbers */}
+              {[...Array(totalPages)].map((_, index) => {
+                const page = index + 1;
+                return (
+                  <Button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`px-4 py-2 border rounded-md ${
+                      currentPage === page ? "bg-blue-500 text-white" : "bg-white hover:bg-white/80 text-black"
+                    }`}
+                  >
+                    {page}
+                  </Button>
+                );
+              })}
+
               <Button
                 onClick={() =>
                   setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                 }
                 disabled={currentPage === totalPages}
               >
-                Next
+                <MoveRight />
               </Button>
             </div>
           )}

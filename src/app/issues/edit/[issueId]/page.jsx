@@ -1,10 +1,10 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import "easymde/dist/easymde.min.css";
 import LoadingBtn from "@/components/helper/LoadingBtn";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useParams, useRouter } from "next/navigation";
 import { handleAuthRequest } from "@/components/utils/apiRequest";
 import { BASE_API_URL } from "@/server";
 import { toast } from "sonner";
@@ -16,47 +16,75 @@ const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
   loading: () => <p>Loading editor...</p>, // Prevent chunk errors
 });
 
-const NewIssue = () => {
-  const [loading, setLoading] = useState(false);
+const EditIssue = () => {
+  const { issueId } = useParams(); // ✅ Fix useParams
+  const router = useRouter();
+  const queryClient = useQueryClient();
+
+  // State for form data
   const [formData, setFormData] = useState({
     title: "",
     description: "",
   });
 
-  const queryClient = useQueryClient();
-  const router = useRouter();
+  // Fetch the issue data
+  const { data: issue, isLoading } = useQuery({
+    queryKey: ["issue", issueId],
+    queryFn: async () => {
+      const response = await axios.get(`${BASE_API_URL}/issues/${issueId}`, {
+        withCredentials: true,
+      });
+      return response.data;
+    },
+    onError: () => {
+      toast.error("Failed to load issue details");
+    },
+  });
 
+  // Populate form data when issue data is fetched
+  useEffect(() => {
+    if (issue) {
+      setFormData({
+        title: issue.title || "",
+        description: issue.description || "",
+      });
+    }
+  }, [issue]);
+
+  // Mutation for updating the issue
   const { mutate, isPending } = useMutation({
     mutationFn: async () => {
       return handleAuthRequest(async () => {
-        const response = await axios.post(
-          `${BASE_API_URL}/issues/create`,
+        const response = await axios.put(
+          `${BASE_API_URL}/issues/update/${issueId}`,
           formData,
           {
             withCredentials: true,
           }
         );
         return response.data;
-      }, setLoading);
+      });
     },
     onSuccess: () => {
-      toast.success("Issue created successfully");
-      queryClient.invalidateQueries("issues");
+      toast.success("Issue updated successfully");
+      queryClient.invalidateQueries(["issue", issueId]);
       router.push("/issues");
     },
     onError: (error) => {
-      toast.error(error.response?.data?.message || "Issue creation failed");
+      toast.error(error.response?.data?.message || "Issue update failed");
     },
   });
 
   const handleSubmit = (e) => {
-    e.preventDefault(); // Prevent page reload
-    mutate(formData);
+    e.preventDefault();
+    mutate();
   };
+
+  if (isLoading) return <p>Loading issue details...</p>;
 
   return (
     <div className="md:px-20 px-2.5 py-10 md:max-w-6xl w-full">
-      <h1 className="text-2xl font-bold mb-4">New Issue</h1>
+      <h1 className="text-2xl font-bold mb-4">Update Issue</h1>
 
       <form onSubmit={handleSubmit}>
         {/* Title Input */}
@@ -87,11 +115,11 @@ const NewIssue = () => {
           type="submit"
           className="w-full mt-4"
         >
-          {isPending ? "Creating..." : "Create Issue"}
+          {isPending ? "Updating..." : "Update Issue"}
         </LoadingBtn>
       </form>
     </div>
   );
 };
 
-export default NewIssue;
+export default EditIssue;
